@@ -1,6 +1,7 @@
 import './App.css'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import AuthorityDashboard from '../src/pages/AuthorityDashboard';
+import PublicDashboard from '../src/pages/PublicDashboard';
 function App() {
   return (
     <>
@@ -8,6 +9,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/authority" element={<AuthorityDashboard/>} />
+            <Route path="/dashboard" element={<PublicDashboard />} />
           </Routes>
         </BrowserRouter>
       </div>
@@ -16,4 +18,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

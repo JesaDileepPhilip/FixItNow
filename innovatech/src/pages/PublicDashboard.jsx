@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
-import IssueCard from './components/IssueCard';
-import FilterNavbar from './components/FilterNavbar';
-import IssueModal from './components/IssueModal';
+import IssueCard from './../components/IssueCard';
+import FilterNavbar from './../components/FilterNavbar';
+import IssueModal from './../components/IssueModal';
 //import Footer from './components/Footer';
-import { mockIssues } from './data/mockData';
+import { mockIssues } from './../components/Types';
 import './PublicDashboard.css';
 
 function PublicDashboard() {
@@ -103,7 +103,7 @@ function PublicDashboard() {
         </div>
       </main>
 
-      <Footer />
+     {/* <Footer />
 
       {selectedIssue && (
         <IssueModal
@@ -111,7 +111,7 @@ function PublicDashboard() {
           onClose={handleCloseModal}
           onUpvote={handleUpvote}
         />
-      )}
+      )}*/}
     </div>
   );
 }
