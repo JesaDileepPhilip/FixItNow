@@ -10,7 +10,7 @@ import './components/Navbar.css';
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import AuthorityDashboard from '../src/pages/AuthorityDashboard';
-import PublicDashboard from '../src/pages/PublicDashboard';
+
 function App() {
   return (
     <>
@@ -21,7 +21,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/report" element={<ReportIssue />} />
-              <Route path="/dashboard/public" element={<PublicDashboard />} />
+              <Route path="/dashboard" element={<PublicDashboard />} />
               
               <Route path="/authority" element={<AuthorityDashboard/>} />
           </Routes>
