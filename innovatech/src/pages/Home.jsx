@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Home.css';
 import { Camera, BarChart, TrendingUp } from 'lucide-react'; 
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleReportClick = () => {
+    navigate('/report'); // Adjust this path if your route is different
+  };
+
   return (
     <>
       <Navbar />
@@ -26,7 +33,7 @@ const Home = () => {
             </p>
 
             <div className="hero-buttons">
-              <button className="btn-primary">
+              <button className="btn-primary" onClick={handleReportClick}>
                 <Camera className="icon" /> 
                 Report an Issue
               </button>
