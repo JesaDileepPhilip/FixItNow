@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AuthorityDashboard from './pages/AuthorityDashboard';
 import './App.css'
 import React from 'react';
 import Home from './pages/Home';
@@ -8,11 +10,21 @@ import PublicDashboard from './pages/PublicDashboard';
 import Navbar from './components/Navbar';
 import './components/Navbar.css';
 
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import AuthorityDashboard from '../src/pages/AuthorityDashboard';
 
 function App() {
   return (
+<<<<<<< HEAD:innovatech/src/App.jsx
+    <BrowserRouter>
+      <Routes>
+        <Route path="/authority" element={<AuthorityDashboard />} />
+        <Route path="/dashboard" element={<PublicDashboard />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
+  );
+=======
     <>
       <div>
         <BrowserRouter>
@@ -30,6 +42,7 @@ function App() {
       
     </>
   )
+>>>>>>> 2d724d45f22c7a8dc2d0130cb04a217565c7d76b:frontend/src/App.jsx
 }
 
 export default App;
