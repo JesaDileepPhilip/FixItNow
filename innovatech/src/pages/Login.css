@@ -8,8 +8,7 @@
   overflow: hidden;
 }
 
-
-/* Glassmorphism Box */
+/* Login Box (Glassmorphism) */
 .login-box {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -21,13 +20,10 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #1f2937;
-}
-
-/* Optional: Add smooth entrance animation */
-.login-box {
   animation: fadeInUp 0.6s ease-out both;
 }
 
+/* Optional: Add smooth entrance animation */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -39,6 +35,7 @@
   }
 }
 
+/* Login Card (Alternative styling if needed) */
 .login-card {
   background: #ffffff;
   padding: 3rem;
@@ -56,12 +53,14 @@
   font-weight: 600;
 }
 
+/* Form */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+/* Input Groups */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -91,6 +90,7 @@
   color: #95a5a6;
 }
 
+/* Button */
 .login-btn {
   background-color: #3498db;
   color: white;
@@ -108,6 +108,7 @@
   background-color: #2980b9;
 }
 
+/* Footer */
 .login-footer {
   text-align: center;
   margin-top: 2rem;
@@ -128,5 +129,3 @@
 .login-footer a:hover {
   text-decoration: underline;
 }
-
-

@@ -6,25 +6,29 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-brand">
-          <h2>FixItNow</h2>
+          <div className="brand-icon">F</div>
+          <span className="brand-text">FixItNow</span>
+          
         </div>
-        <ul className="navbar-menu">
-          <li className="navbar-item">
-            <a href="/" className="navbar-link">Home</a>
-          </li>
-          <li className="navbar-item">
-            <a href="/report" className="navbar-link">Report Issue</a>
-          </li>
-          <li className="navbar-item">
-            <a href="/dashboard" className="navbar-link">Dashboard</a>
-          </li>
-          <li className="navbar-item">
-            <a href="/login" className="navbar-link">Login</a>
-          </li>
-          <li className="navbar-item">
-            <a href="/signup" className="navbar-link">Sign Up</a>
-          </li>
-        </ul>
+        
+        <div className="navbar-menu">
+          <a href="#" className="navbar-item active">
+            <i className="icon-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="#" className="navbar-item">
+            <i className="icon-report"></i>
+            <span>Report Issue</span>
+          </a>
+          <a href="#" className="navbar-item">
+            <i className="icon-dashboard"></i>
+            <span>Public Dashboard</span>
+          </a>
+          <a href="#" className="navbar-item">
+            <i className="icon-logout"></i>
+            <span>Logout</span>
+          </a>
+        </div>
       </div>
     </nav>
   );
