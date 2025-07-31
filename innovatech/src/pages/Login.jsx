@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Building2, Eye, EyeOff } from 'lucide-react';
-import './login.css'; // link your custom stylesheet
+import { Link } from 'react-router-dom';
+import './login.css';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,19 +29,17 @@ function Login() {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
-            <label htmlFor="email">Email address</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder="Enter your email address"
               required
             />
           </div>
 
           <div className="input-group">
-            <label htmlFor="password">Password</label>
             <div className="password-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -72,11 +71,11 @@ function Login() {
             <a href="#" className="forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" className="submit-btn">Sign in</button>
+          <button type="submit" className="submit-btn">Login</button>
         </form>
 
         <p className="signup-link">
-          Don’t have an account? <a href="#">Sign up</a>
+          Don’t have an account? <Link to="/signup">Sign up</Link>
         </p>
       </div>
     </div>
