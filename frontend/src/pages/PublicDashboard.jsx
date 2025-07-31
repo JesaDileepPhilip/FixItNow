@@ -50,7 +50,7 @@ function PublicDashboard() {
         <div className="container">
           <div className="header-content">
             <div className="logo">
-              <h1>CivicFix</h1>
+              <h1>Dashboard</h1>
               <p>Report City Issues in Real-Time</p>
             </div>
             
@@ -103,7 +103,7 @@ function PublicDashboard() {
         </div>
       </main>
 
-     {/* <Footer />
+     
 
       {selectedIssue && (
         <IssueModal
@@ -111,7 +111,7 @@ function PublicDashboard() {
           onClose={handleCloseModal}
           onUpvote={handleUpvote}
         />
-      )}*/}
+      )}
     </div>
   );
 }

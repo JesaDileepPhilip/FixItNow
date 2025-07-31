@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { ArrowLeft, Camera, MapPin, Upload, X } from 'lucide-react';
+import { ArrowLeft, Camera, Upload, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './ReportIssue.css';
+import LocationPicker from './LocationPicker';
 
 const ReportIssue = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const ReportIssue = () => {
         ...prev,
         photo: file
       }));
-      
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setPhotoPreview(e.target.result);
@@ -65,8 +66,7 @@ const ReportIssue = () => {
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
-    
-    // Basic validation
+
     if (!formData.description.trim()) {
       alert('Please enter a description');
       return;
@@ -76,34 +76,13 @@ const ReportIssue = () => {
       return;
     }
     if (!formData.location.trim()) {
-      alert('Please enter a location');
+      alert('Please select a location');
       return;
     }
-    
-    console.log('Form submitted:', formData);
-    // Handle form submission here
-    alert('Report submitted successfully!');
-    navigate('/'); // Navigate back to home after submission
-  };
 
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setFormData(prev => ({
-            ...prev,
-            location: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
-          }));
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          alert('Unable to get your location. Please enter it manually.');
-        }
-      );
-    } else {
-      alert('Geolocation is not supported by this browser.');
-    }
+    console.log('Form submitted:', formData);
+    alert('Report submitted successfully!');
+    navigate('/');
   };
 
   return (
@@ -127,8 +106,8 @@ const ReportIssue = () => {
               {photoPreview ? (
                 <div className="photo-preview">
                   <img src={photoPreview} alt="Preview" className="preview-image" />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="remove-photo"
                     onClick={() => {
                       setPhotoPreview(null);
@@ -140,7 +119,7 @@ const ReportIssue = () => {
                   </button>
                 </div>
               ) : (
-                <div 
+                <div
                   className="upload-placeholder"
                   onClick={() => fileInputRef.current?.click()}
                 >
@@ -198,37 +177,14 @@ const ReportIssue = () => {
             </select>
           </div>
 
-          {/* Location Section */}
-          <div className="form-section">
-            <label className="section-label" htmlFor="location">
-              Location
-            </label>
-            <div className="location-input-group">
-              <input
-                id="location"
-                name="location"
-                type="text"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="Enter location or use GPS"
-                className="location-input"
-                required
-              />
-              <button 
-                type="button" 
-                className="gps-button"
-                onClick={getCurrentLocation}
-                title="Get current location"
-              >
-                <MapPin size={20} />
-              </button>
-            </div>
-          </div>
+          {/* Location Picker Section */}
+          <LocationPicker formData={formData} setFormData={setFormData} />
 
           {/* Intensity Scale */}
           <div className="form-section">
             <label className="section-label">
-              Issue Intensity: <span className="intensity-label" style={{ color: intensityLabels[formData.intensity].color }}>
+              Issue Intensity:{' '}
+              <span className="intensity-label" style={{ color: intensityLabels[formData.intensity].color }}>
                 {intensityLabels[formData.intensity].label}
               </span>
             </label>
@@ -244,10 +200,7 @@ const ReportIssue = () => {
               <div className="intensity-markers">
                 {Object.entries(intensityLabels).map(([value, { label, color }]) => (
                   <div key={value} className="intensity-marker">
-                    <div 
-                      className="marker-dot" 
-                      style={{ backgroundColor: color }}
-                    ></div>
+                    <div className="marker-dot" style={{ backgroundColor: color }}></div>
                     <span className="marker-label">{label}</span>
                   </div>
                 ))}
@@ -257,12 +210,8 @@ const ReportIssue = () => {
 
           {/* Submit Button */}
           <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={() => navigate('/')}>
-              Cancel
-            </button>
-            <button type="submit" className="submit-button">
-              Submit Report
-            </button>
+            <button type="button" className="cancel-button" onClick={() => navigate('/')}>Cancel</button>
+            <button type="submit" className="submit-button">Submit Report</button>
           </div>
         </form>
       </div>
