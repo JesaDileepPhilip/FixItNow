@@ -36,7 +36,7 @@ const LocationMarker = ({ position, setPosition, setAddress }) => {
 };
 
 const getAddressFromCoords = async (lat, lng, setAddress) => {
-  const apiKey = "8cce1b9ef90e43fdbc32db3e38fe0851";
+  const apiKey = import.meta.env.VITE_OPENCAGE_API_KEY;
   const response = await fetch(
     `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`
   );
