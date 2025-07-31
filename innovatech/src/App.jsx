@@ -1,22 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-
 import './App.css'
-
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import AuthorityDashboard from '../src/pages/AuthorityDashboard';
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-   <div>
-      <nav>
-        <Link to="/dashboard">Dashboard</Link>
-      </nav>
-
-      <Routes>
-        <Route path="/dashboard" element={<PublicDashboard />} />
-      </Routes>
-    </div>
+    <>
+      <div>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/authority" element={<AuthorityDashboard/>} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+      
+    </>
   )
 }
 
-export default App
+export default App
