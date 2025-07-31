@@ -1,0 +1,10 @@
+supabase
+python-dotenv
+fastapi
+
+uvicorn
+pydantic[email]
+
+
+
+passlib[bcrypt]
