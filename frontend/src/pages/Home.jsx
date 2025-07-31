@@ -1,9 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Home.css';
 import { Camera, BarChart, TrendingUp } from 'lucide-react'; 
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleReportClick = () => {
+    navigate('/report'); 
+  };
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard'); 
+  };
+
   return (
     <>
       <Navbar />
@@ -26,11 +37,11 @@ const Home = () => {
             </p>
 
             <div className="hero-buttons">
-              <button className="btn-primary">
+              <button className="btn-primary" onClick={handleReportClick}>
                 <Camera className="icon" /> 
                 Report an Issue
               </button>
-              <button className="btn-secondary">
+              <button className="btn-secondary" onClick={handleDashboardClick}>
                 <BarChart className="icon" /> 
                 View Dashboard
               </button>

@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AuthorityDashboard from './pages/AuthorityDashboard';
 import './App.css'
 import React from 'react';
 import Home from './pages/Home';
@@ -8,8 +10,6 @@ import PublicDashboard from './pages/PublicDashboard';
 import Navbar from './components/Navbar';
 import './components/Navbar.css';
 
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import AuthorityDashboard from '../src/pages/AuthorityDashboard';
 
 function App() {
   return (
