@@ -28,6 +28,7 @@ const Navbar = () => {
             <i className="icon-logout"></i>
             <span>Logout</span>
           </Link>
+          
         </div>
       </div>
     </nav>
