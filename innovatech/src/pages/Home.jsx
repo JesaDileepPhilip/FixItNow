@@ -1,40 +1,66 @@
 import React from 'react';
+import Navbar from '../components/Navbar'; // Adjust path if needed
 import './Home.css';
 
 const Home = () => {
   return (
-    <div className="home">
-      <div className="hero-section">
-        <div className="hero-content">
-          <h1>Welcome to FixItNow</h1>
-          <p>Your one-stop solution for reporting and tracking civic issues in your community.</p>
-          <div className="hero-buttons">
-            <button className="btn-primary">Report an Issue</button>
-            <button className="btn-secondary">View Dashboard</button>
+    <>
+      <Navbar /> 
+
+      <div className="home-container">
+        <div className="hero-section">
+          <div className="hero-content">
+            <div className="hero-tagline">
+              Spot it. Report it. Fix it.
+            </div>
+
+            <h1 className="hero-title">
+              Fix Your City,<br />
+              <span className="gradient-text">One Report at a Time</span>
+            </h1>
+
+            <p className="hero-description">
+              Report city infrastructure issues in real-time. Snap a photo, share your location, and
+              watch as your community improves together.
+            </p>
+
+            <div className="hero-buttons">
+              <button className="btn-primary">
+                <i className="icon-camera"></i>
+                Report an Issue
+              </button>
+              <button className="btn-secondary">
+                <i className="icon-chart"></i>
+                View Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="features-section">
+          <div className="feature-card">
+            <div className="feature-icon blue-bg">
+              <i className="icon-camera-large"></i>
+            </div>
+            <h3 className="feature-title">Quick Reporting</h3>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon green-bg">
+              <i className="icon-chart-large"></i>
+            </div>
+            <h3 className="feature-title">Real-time Tracking</h3>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon purple-bg">
+              <i className="icon-community-large"></i>
+            </div>
+            <h3 className="feature-title">Community Impact</h3>
           </div>
         </div>
       </div>
-      
-      <div className="features-section">
-        <div className="container">
-          <h2>How It Works</h2>
-          <div className="features-grid">
-            <div className="feature-card">
-              <h3>1. Report</h3>
-              <p>Easily report civic issues in your area with photos and descriptions.</p>
-            </div>
-            <div className="feature-card">
-              <h3>2. Track</h3>
-              <p>Monitor the progress of your reported issues in real-time.</p>
-            </div>
-            <div className="feature-card">
-              <h3>3. Resolve</h3>
-              <p>Authorities work to resolve issues and update the community.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
