@@ -6,6 +6,10 @@
   transition: all 0.3s ease;
   border: 1px solid #e2e8f0;
 }
+.issue-card {
+  display: flex;
+  flex-direction: column;
+}
 
 .issue-card:hover {
   transform: translateY(-2px);
@@ -31,14 +35,21 @@
 .card-content {
   padding: 1.5rem;
 }
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
   gap: 1rem;
 }
+
 
 .card-title {
   font-size: 1.25rem;
@@ -46,6 +57,8 @@
   color: #1e293b;
   line-height: 1.4;
   flex: 1;
+  margin-bottom: 0.05px;
+  margin-top: 0px;
 }
 
 .card-tags {
@@ -141,9 +154,9 @@
 .details-btn {
   background-color: #3b82f6;
   color: white;
-  flex: 1;
   justify-content: center;
 }
+
 
 .details-btn:hover {
   background-color: #2563eb;
