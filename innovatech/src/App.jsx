@@ -1,9 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
 import AuthorityDashboard from './pages/AuthorityDashboard';
-import PublicDashboard from './pages/PublicDashboard';
-import './App.css';
-
 import './App.css'
 import React from 'react';
 import Home from './pages/Home';
@@ -14,16 +10,15 @@ import PublicDashboard from './pages/PublicDashboard';
 import Navbar from './components/Navbar';
 import './components/Navbar.css';
 
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import AuthorityDashboard from '../src/pages/AuthorityDashboard';
-import PublicDashboard from '../src/pages/PublicDashboard';
+
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/authority" element={<AuthorityDashboard />} />
         <Route path="/dashboard" element={<PublicDashboard />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
