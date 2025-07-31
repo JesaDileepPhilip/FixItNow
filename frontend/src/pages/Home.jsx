@@ -8,7 +8,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleReportClick = () => {
-    navigate('/report'); // Adjust this path if your route is different
+    navigate('/report'); 
+  };
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard'); 
   };
 
   return (
@@ -37,7 +41,7 @@ const Home = () => {
                 <Camera className="icon" /> 
                 Report an Issue
               </button>
-              <button className="btn-secondary">
+              <button className="btn-secondary" onClick={handleDashboardClick}>
                 <BarChart className="icon" /> 
                 View Dashboard
               </button>
