@@ -354,7 +354,7 @@
   padding: 20px;
   border: 2px solid #e2e8f0;
   border-radius: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: green;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
