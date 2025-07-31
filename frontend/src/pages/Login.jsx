@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Building2, Eye, EyeOff, Shield, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './login.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,38 +13,61 @@ function Login() {
   const [roleSelected, setRoleSelected] = useState(null); // 'user' or 'authority'
   const [showModal, setShowModal] = useState(true);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login attempt:', { email, password, rememberMe, roleSelected });
-    // Redirect based on role: e.g.
-    // if (roleSelected === 'user') navigate("/dashboard")
-    // else navigate("/authority")
+    // you can add API login logic here
   };
+
+  const handleRoleSelect = (role) => {
+    setRoleSelected(role);
+    setShowModal(false);
+    navigate(`/login/${role.toLowerCase()}`);
+  };
+
 
   return (
     <div className="login-container">
       {showModal ? (
-        <div className="login-box">
-          <div className="login-header">
-            <div className="login-icon">
+        <div className="login-wrapper">
+          <div className="info-box animate-left">
+            <div className="login-header-alt">
               <Building2 className="icon" />
+              <h1 className="login-title">FixItNow</h1>
+              <p className="login-subtitle">Building safer cities together</p>
             </div>
-            <h1 className="login-title">FixItNow</h1>
-            <p className="login-subtitle">Building safer cities together</p>
+            <div className="login-description">
+              <p>FixItNow connects citizens with authorities for prompt urban issue resolution.</p>
+              <p>Common issues you can report include:</p>
+              <ul>
+                <li>Potholes and road damage</li>
+                <li>Streetlight outages</li>
+                <li>Sewage blockages or overflows</li>
+                <li>Water supply issues</li>
+                <li>Garbage mismanagement</li>
+                <li>Public safety and sanitation concerns</li>
+              </ul>
+            </div>
           </div>
 
-          <p className="role-title">Log in as:</p>
-          <div className="role-selection">
-            <button onClick={() => { setRoleSelected('Public'); setShowModal(false); }} className="role-btn">
+          <div className="selection-box animate-right">
+            <p className="role-title">Log in as:</p>
+            <div className="role-selection">
+              <button onClick={() => handleRoleSelect('user')} className="role-btn">
               <User className="role-icon" />
               User
             </button>
-            <button onClick={() => { setRoleSelected('Authority'); setShowModal(false); }} className="role-btn">
+            <button onClick={() => handleRoleSelect('authority')} className="role-btn">
               <Shield className="role-icon" />
               Authority
             </button>
+
+            </div>
           </div>
         </div>
       ) : (
@@ -102,9 +127,12 @@ function Login() {
             <button type="submit" className="submit-btn">Login</button>
           </form>
 
-          <p className="signup-link">
-            Don’t have an account? <Link to="/signup">Sign up</Link>
-          </p>
+          {roleSelected !== 'Authority' && (
+            <p className="signup-link">
+              Don’t have an account? <Link to="/signup">Sign up</Link>
+            </p>
+          )}
+
         </div>
       )}
     </div>
