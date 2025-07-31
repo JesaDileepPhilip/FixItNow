@@ -162,3 +162,43 @@ html, body, #root {
 .signup-link a:hover {
   text-decoration: underline;
 }
+
+.role-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a2b48;
+  margin: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+.role-selection {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.role-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffffbb;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-btn:hover {
+  background-color: #e0f1ff;
+  transform: scale(1.05);
+}
+
+.role-icon {
+  width: 32px;
+  height: 32px;
+  color: #0f3247;
+  margin-bottom: 0.5rem;
+}
