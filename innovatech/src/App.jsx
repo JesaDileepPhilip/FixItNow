@@ -10,7 +10,7 @@ import './components/Navbar.css';
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import AuthorityDashboard from '../src/pages/AuthorityDashboard';
-import PublicDashboard from '../src/pages/PublicDashboard';
+
 function App() {
   return (
     <>
