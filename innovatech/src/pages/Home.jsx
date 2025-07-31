@@ -1,11 +1,12 @@
 import React from 'react';
-import Navbar from '../components/Navbar'; // Adjust path if needed
+import Navbar from '../components/Navbar';
 import './Home.css';
+import { Camera, BarChart, TrendingUp } from 'lucide-react'; 
 
 const Home = () => {
   return (
     <>
-      <Navbar /> 
+      <Navbar />
 
       <div className="home-container">
         <div className="hero-section">
@@ -26,11 +27,11 @@ const Home = () => {
 
             <div className="hero-buttons">
               <button className="btn-primary">
-                <i className="icon-camera"></i>
+                <Camera className="icon" /> 
                 Report an Issue
               </button>
               <button className="btn-secondary">
-                <i className="icon-chart"></i>
+                <BarChart className="icon" /> 
                 View Dashboard
               </button>
             </div>
@@ -40,21 +41,21 @@ const Home = () => {
         <div className="features-section">
           <div className="feature-card">
             <div className="feature-icon blue-bg">
-              <i className="icon-camera-large"></i>
+              <Camera className="icon-large" /> 
             </div>
             <h3 className="feature-title">Quick Reporting</h3>
           </div>
 
           <div className="feature-card">
             <div className="feature-icon green-bg">
-              <i className="icon-chart-large"></i>
+              <TrendingUp className="icon-large" /> 
             </div>
             <h3 className="feature-title">Real-time Tracking</h3>
           </div>
 
           <div className="feature-card">
             <div className="feature-icon purple-bg">
-              <i className="icon-community-large"></i>
+              <BarChart className="icon-large" /> 
             </div>
             <h3 className="feature-title">Community Impact</h3>
           </div>

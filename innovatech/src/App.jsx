@@ -10,13 +10,14 @@ import './components/Navbar.css';
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import AuthorityDashboard from '../src/pages/AuthorityDashboard';
+import PublicDashboard from '../src/pages/PublicDashboard';
 function App() {
   return (
     <>
       <div>
         <BrowserRouter>
           <Routes>
-              <Route path="/" element={<ReportIssue />} />
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/report" element={<ReportIssue />} />
@@ -31,4 +32,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
