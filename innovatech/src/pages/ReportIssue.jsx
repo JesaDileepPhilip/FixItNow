@@ -6,129 +6,129 @@ const ReportIssue = () => {
     title: '',
     description: '',
     category: '',
-    location: '',
-    urgency: 'medium',
-    image: null
+    image: null,
+    location: ''
   });
 
-  const handleChange = (e) => {
-    if (e.target.name === 'image') {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.files[0]
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-      });
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({
+      ...prev,
+      image: file
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Issue reported:', formData);
+    console.log('Form submitted:', formData);
     // Handle form submission logic here
   };
 
   return (
-    <div className="report-container">
-      <div className="report-card">
-        <h2>Report a Civic Issue</h2>
-        <p className="report-subtitle">Help make your community better by reporting issues that need attention.</p>
-        
-        <form onSubmit={handleSubmit} className="report-form">
-          <div className="form-group">
-            <label htmlFor="title">Issue Title *</label>
+    <div className="report-issue-container">
+      <div className="report-header">
+        <h1>Report an Issue</h1>
+        <p>Help improve your community by reporting infrastructure problems</p>
+      </div>
+
+      <form className="report-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="title">Issue Title *</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            placeholder="Brief description of the issue"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="category">Category *</label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select a category</option>
+            <option value="road">Road & Infrastructure</option>
+            <option value="garbage">Garbage & Waste</option>
+            <option value="water">Water & Drainage</option>
+            <option value="electricity">Electricity & Power</option>
+            <option value="trees">Trees & Parks</option>
+            <option value="streetlight">Street Lighting</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            placeholder="Provide more details about the issue..."
+            rows="4"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="image">Upload Photo</label>
+          <div className="file-upload-area">
             <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-              placeholder="Brief description of the issue"
+              type="file"
+              id="image"
+              name="image"
+              onChange={handleImageUpload}
+              accept="image/*"
             />
+            <div className="file-upload-content">
+              <i className="upload-icon">📷</i>
+              <p>Click to upload or drag and drop</p>
+              <span>PNG, JPG up to 5MB</span>
+            </div>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="category">Category *</label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a category</option>
-              <option value="roads">Roads & Transportation</option>
-              <option value="utilities">Utilities</option>
-              <option value="environment">Environment & Sanitation</option>
-              <option value="safety">Public Safety</option>
-              <option value="infrastructure">Infrastructure</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="location">Location *</label>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="location">Location *</label>
+          <div className="location-input-group">
             <input
               type="text"
               id="location"
               name="location"
               value={formData.location}
-              onChange={handleChange}
+              onChange={handleInputChange}
+              placeholder="Enter address or landmark"
               required
-              placeholder="Street address or landmark"
             />
+            <button type="button" className="location-btn">
+              📍 Use GPS
+            </button>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="urgency">Urgency Level</label>
-            <select
-              id="urgency"
-              name="urgency"
-              value={formData.urgency}
-              onChange={handleChange}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="description">Detailed Description *</label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              placeholder="Provide a detailed description of the issue..."
-              rows="4"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="image">Upload Photo (Optional)</label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              onChange={handleChange}
-              accept="image/*"
-              className="file-input"
-            />
-            <p className="file-help">Upload a photo to help authorities understand the issue better.</p>
-          </div>
-          
-          <button type="submit" className="submit-btn">
+        </div>
+
+        <div className="form-actions">
+          <button type="button" className="btn-cancel">
+            Cancel
+          </button>
+          <button type="submit" className="btn-submit">
             Submit Report
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
