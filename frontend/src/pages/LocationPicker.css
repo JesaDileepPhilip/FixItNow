@@ -1,0 +1,12 @@
+.map-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}

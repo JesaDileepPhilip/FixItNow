@@ -40,7 +40,7 @@ const IssueModal = ({ issue, onClose, onUpvote }) => {
   const handleSubmitComment = (e) => {
     e.preventDefault();
     if (newComment.trim()) {
-      // In a real app, this would make an API call
+
       console.log('New comment:', newComment);
       setNewComment('');
     }

@@ -1,248 +1,394 @@
-import React, { useState, useEffect } from 'react';
-import './AuthorityDashboard.css';
+import React, { useState, useMemo } from "react";
+import {
+  MapPin,
+  ChevronDown,
+  ChevronUp,
+  ThumbsUp,
+  Calendar,
+  Filter,
+  AlertCircle,
+  Clock,
+  CheckCircle,
+  BarChart3,
+  Camera,
+  Edit3,
+} from "lucide-react";
+import "./AuthorityDashboard.css";
+
+const mockIssues = [
+  {
+    id: 1,
+    title: "Broken Street Light on Main Avenue",
+    description:
+      "The street light has been flickering for weeks and finally went out completely. This creates a safety hazard for pedestrians and drivers, especially during evening hours.",
+    category: "Infrastructure",
+    location: "Downtown",
+    status: "pending",
+    upvotes: 23,
+    timestamp: "2024-01-15T10:30:00Z",
+    image:
+      "https://images.pexels.com/photos/327458/pexels-photo-327458.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+  {
+    id: 2,
+    title: "Garbage Overflow at Park Entrance",
+    description:
+      "Multiple garbage bins are overflowing at the main park entrance. The waste is attracting pests and creating an unpleasant odor for visitors.",
+    category: "Waste Management",
+    location: "Central Park",
+    status: "in-progress",
+    upvotes: 45,
+    timestamp: "2024-01-14T14:15:00Z",
+    image:
+      "https://images.pexels.com/photos/2827735/pexels-photo-2827735.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+  {
+    id: 3,
+    title: "Pothole on 5th Street",
+    description:
+      "Large pothole has formed after recent rains. It's causing damage to vehicles and poses a risk to cyclists and motorcyclists.",
+    category: "Roads",
+    location: "Residential Area",
+    status: "resolved",
+    upvotes: 67,
+    timestamp: "2024-01-13T09:20:00Z",
+    image:
+      "https://images.pexels.com/photos/163016/highway-asphalt-space-sky-163016.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+  {
+    id: 4,
+    title: "Illegal Dumping Site",
+    description:
+      "Construction debris and household waste have been illegally dumped in the vacant lot. This is creating environmental and health concerns for nearby residents.",
+    category: "Environment",
+    location: "Industrial Zone",
+    status: "pending",
+    upvotes: 34,
+    timestamp: "2024-01-12T16:45:00Z",
+    image:
+      "https://images.pexels.com/photos/2586819/pexels-photo-2586819.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+  {
+    id: 5,
+    title: "Water Leak in Public Restroom",
+    description:
+      "Continuous water leak in the public restroom at the community center. Water is pooling on the floor creating slip hazards.",
+    category: "Utilities",
+    location: "Community Center",
+    status: "in-progress",
+    upvotes: 19,
+    timestamp: "2024-01-11T11:30:00Z",
+    image:
+      "https://images.pexels.com/photos/534220/pexels-photo-534220.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+  {
+    id: 6,
+    title: "Damaged Park Bench",
+    description:
+      "Park bench has broken slats and sharp edges. It's unsafe for public use and needs immediate repair or replacement.",
+    category: "Parks & Recreation",
+    location: "Downtown",
+    status: "resolved",
+    upvotes: 12,
+    timestamp: "2024-01-10T08:15:00Z",
+    image:
+      "https://images.pexels.com/photos/277559/pexels-photo-277559.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+];
+
+const getRelativeTime = (timestamp) => {
+  const now = new Date();
+  const past = new Date(timestamp);
+  const diffInHours = Math.floor((now - past) / (1000 * 60 * 60));
+
+  if (diffInHours < 1) return "Just now";
+  if (diffInHours < 24)
+    return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 7)
+    return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  return `${diffInWeeks} week${diffInWeeks > 1 ? "s" : ""} ago`;
+};
 
 const AuthorityDashboard = () => {
-  const [issues, setIssues] = useState([]);
-  const [filter, setFilter] = useState('all');
-  const [selectedIssue, setSelectedIssue] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [updateStatus, setUpdateStatus] = useState('');
-  const [updateNote, setUpdateNote] = useState('');
+  // const [selectedLocation, setSelectedLocation] = useState("all");
+  const [locationSearch, setLocationSearch] = useState("");
+  const [expandedCard, setExpandedCard] = useState(null);
 
-  // Mock data - replace with actual API call
-  useEffect(() => {
-    const mockIssues = [
-      {
-        id: 1,
-        title: 'Pothole on Main Street',
-        category: 'roads',
-        status: 'pending',
-        urgency: 'high',
-        location: '123 Main Street',
-        dateReported: '2025-01-15',
-        reportedBy: 'John Doe',
-        description: 'Large pothole causing damage to vehicles',
-        assignedTo: null,
-        updates: []
-      },
-      {
-        id: 2,
-        title: 'Broken Streetlight',
-        category: 'utilities',
-        status: 'in_progress',
-        urgency: 'medium',
-        location: 'Oak Avenue & 5th Street',
-        dateReported: '2025-01-14',
-        reportedBy: 'Jane Smith',
-        description: 'Streetlight has been out for 3 days',
-        assignedTo: 'Public Works Team',
-        updates: [
-          { date: '2025-01-16', note: 'Issue assigned to maintenance crew', status: 'in_progress' }
-        ]
-      }
-    ];
-    setIssues(mockIssues);
-  }, []);
+  
 
-  const handleStatusUpdate = (issue) => {
-    setSelectedIssue(issue);
-    setUpdateStatus(issue.status);
-    setUpdateNote('');
-    setShowModal(true);
+  const filteredIssues = useMemo(() => {
+    if (!locationSearch.trim()) return mockIssues;
+    return mockIssues.filter((issue) =>
+      issue.location.toLowerCase().includes(locationSearch.trim().toLowerCase())
+    );
+  }, [locationSearch]);
+
+
+  const stats = useMemo(() => {
+    const total = filteredIssues.length;
+    const pending = filteredIssues.filter(
+      (issue) => issue.status === "pending"
+    ).length;
+    const inProgress = filteredIssues.filter(
+      (issue) => issue.status === "in-progress"
+    ).length;
+    const resolved = filteredIssues.filter(
+      (issue) => issue.status === "resolved"
+    ).length;
+
+    return { total, pending, inProgress, resolved };
+  }, [filteredIssues]);
+
+  const handleStatusUpdate = (issueId, newStatus) => {
+    console.log(`Updating issue ${issueId} status to ${newStatus}`);
   };
 
-  const submitUpdate = () => {
-    // Update the issue status and add note
-    const updatedIssues = issues.map(issue => {
-      if (issue.id === selectedIssue.id) {
-        return {
-          ...issue,
-          status: updateStatus,
-          updates: [
-            ...issue.updates,
-            {
-              date: new Date().toISOString().split('T')[0],
-              note: updateNote,
-              status: updateStatus
-            }
-          ]
-        };
-      }
-      return issue;
-    });
-    
-    setIssues(updatedIssues);
-    setShowModal(false);
-    setSelectedIssue(null);
+  const toggleCard = (issueId) => {
+    setExpandedCard(expandedCard === issueId ? null : issueId);
   };
 
-  const getStatusClass = (status) => {
+  const getStatusBadgeClass = (status) => {
     switch (status) {
-      case 'pending': return 'status-pending';
-      case 'in_progress': return 'status-progress';
-      case 'resolved': return 'status-resolved';
-      default: return '';
+      case "pending":
+        return "status-badge status-pending";
+      case "in-progress":
+        return "status-badge status-in-progress";
+      case "resolved":
+        return "status-badge status-resolved";
+      default:
+        return "status-badge status-pending";
     }
   };
 
-  const getUrgencyClass = (urgency) => {
-    switch (urgency) {
-      case 'low': return 'urgency-low';
-      case 'medium': return 'urgency-medium';
-      case 'high': return 'urgency-high';
-      case 'critical': return 'urgency-critical';
-      default: return '';
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "pending":
+        return <AlertCircle className="status-icon" />;
+      case "in-progress":
+        return <Clock className="status-icon" />;
+      case "resolved":
+        return <CheckCircle className="status-icon" />;
+      default:
+        return <AlertCircle className="status-icon" />;
     }
-  };
-
-  const filteredIssues = issues.filter(issue => {
-    if (filter === 'all') return true;
-    return issue.status === filter;
-  });
-
-  const stats = {
-    total: issues.length,
-    pending: issues.filter(i => i.status === 'pending').length,
-    inProgress: issues.filter(i => i.status === 'in_progress').length,
-    resolved: issues.filter(i => i.status === 'resolved').length
   };
 
   return (
-    <div className="authority-dashboard">
+    <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>Authority Dashboard</h1>
-        <p>Manage and update reported civic issues</p>
-      </div>
-
-      <div className="stats-grid">
-        <div className="stat-card">
-          <h3>{stats.total}</h3>
-          <p>Total Issues</p>
-        </div>
-        <div className="stat-card pending">
-          <h3>{stats.pending}</h3>
-          <p>Pending</p>
-        </div>
-        <div className="stat-card progress">
-          <h3>{stats.inProgress}</h3>
-          <p>In Progress</p>
-        </div>
-        <div className="stat-card resolved">
-          <h3>{stats.resolved}</h3>
-          <p>Resolved</p>
-        </div>
-      </div>
-
-      <div className="dashboard-controls">
-        <div className="filter-group">
-          <label htmlFor="filter">Filter by Status:</label>
-          <select
-            id="filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All Issues</option>
-            <option value="pending">Pending Review</option>
-            <option value="in_progress">In Progress</option>
-            <option value="resolved">Resolved</option>
-          </select>
+        <div className="header-content">
+          <div className="header-info">
+            <div>
+              <h1 className="header-title">Authority Dashboard</h1>
+              <p className="header-subtitle">
+                Spot It, Report It, Fix It!
+              </p>
+            </div>
+            <div className="location-filter">
+              <Filter className="filter-icon" />
+              <input
+                type="text"
+                placeholder="Search location..."
+                value={locationSearch}
+                onChange={(e) => setLocationSearch(e.target.value)}
+                className="location-search-input"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="issues-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Issue</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Urgency</th>
-              <th>Location</th>
-              <th>Reported</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredIssues.map(issue => (
-              <tr key={issue.id}>
-                <td>
-                  <div className="issue-title">{issue.title}</div>
-                  <div className="issue-reporter">by {issue.reportedBy}</div>
-                </td>
-                <td>{issue.category}</td>
-                <td>
-                  <span className={`status-badge ${getStatusClass(issue.status)}`}>
-                    {issue.status.replace('_', ' ')}
-                  </span>
-                </td>
-                <td>
-                  <span className={`urgency-badge ${getUrgencyClass(issue.urgency)}`}>
-                    {issue.urgency}
-                  </span>
-                </td>
-                <td>{issue.location}</td>
-                <td>{new Date(issue.dateReported).toLocaleDateString()}</td>
-                <td>
-                  <button 
-                    className="btn-update"
-                    onClick={() => handleStatusUpdate(issue)}
-                  >
-                    Update Status
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Update Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Update Issue Status</h3>
-            <div className="modal-content">
-              <div className="issue-info">
-                <h4>{selectedIssue?.title}</h4>
-                <p>{selectedIssue?.description}</p>
+      <div className="dashboard-main">
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-info">
+                <p className="stat-label">Total Issues</p>
+                <p className="stat-value">{stats.total}</p>
               </div>
-              
-              <div className="form-group">
-                <label htmlFor="status">New Status:</label>
-                <select
-                  id="status"
-                  value={updateStatus}
-                  onChange={(e) => setUpdateStatus(e.target.value)}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                </select>
+              <div className="stat-icon-container stat-icon-blue">
+                <BarChart3 className="stat-icon" />
               </div>
-              
-              <div className="form-group">
-                <label htmlFor="note">Update Note:</label>
-                <textarea
-                  id="note"
-                  value={updateNote}
-                  onChange={(e) => setUpdateNote(e.target.value)}
-                  placeholder="Add a note about this update..."
-                  rows="3"
-                />
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-info">
+                <p className="stat-label">Pending</p>
+                <p className="stat-value stat-value-orange">{stats.pending}</p>
               </div>
-              
-              <div className="modal-actions">
-                <button className="btn-cancel" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
-                <button className="btn-save" onClick={submitUpdate}>
-                  Save Update
-                </button>
+              <div className="stat-icon-container stat-icon-orange">
+                <AlertCircle className="stat-icon" />
+              </div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-info">
+                <p className="stat-label">In Progress</p>
+                <p className="stat-value stat-value-blue">{stats.inProgress}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-blue">
+                <Clock className="stat-icon" />
+              </div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-info">
+                <p className="stat-label">Resolved</p>
+                <p className="stat-value stat-value-green">{stats.resolved}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-green">
+                <CheckCircle className="stat-icon" />
               </div>
             </div>
           </div>
         </div>
-      )}
+        <div className="issues-section">
+          <h2 className="issues-title">Recent Issues</h2>
+
+          {filteredIssues.length === 0 ? (
+            <div className="no-issues">
+              <AlertCircle className="no-issues-icon" />
+              <p className="no-issues-text">
+                No issues found for the selected location.
+              </p>
+            </div>
+          ) : (
+            <div className="issues-list">
+              {filteredIssues.map((issue) => (
+                <div key={issue.id} className="issue-card">
+                  <div className="card-header">
+                    <div className="card-content">
+                      <img
+                        src={issue.image}
+                        alt={issue.title}
+                        className="issue-image"
+                      />
+
+                      <div className="issue-info">
+                        <div className="issue-main">
+                          <div className="issue-details">
+                            <h3 className="issue-title">{issue.title}</h3>
+
+                            <div className="issue-meta">
+                              <div className="meta-item">
+                                <MapPin className="meta-icon" />
+                                {issue.location}
+                              </div>
+
+                              <div className="meta-item">
+                                <Calendar className="meta-icon" />
+                                Reported {getRelativeTime(issue.timestamp)}
+                              </div>
+
+                              <div
+                                className={getStatusBadgeClass(issue.status)}
+                              >
+                                {getStatusIcon(issue.status)}
+                                {issue.status.charAt(0).toUpperCase() +
+                                  issue.status.slice(1).replace("-", " ")}
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => toggleCard(issue.id)}
+                            className="expand-button"
+                          >
+                            {expandedCard === issue.id ? (
+                              <>
+                                <ChevronUp className="expand-icon" />
+                                Less
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="expand-icon" />
+                                More
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {expandedCard === issue.id && (
+                    <div className="expanded-content">
+                      <div className="expanded-grid">
+                        <div className="expanded-details">
+                          <h4 className="expanded-title">Issue Details</h4>
+                          <p className="issue-description">
+                            {issue.description}
+                          </p>
+
+                          <div className="issue-attributes">
+                            <div className="attribute-item">
+                              <span className="attribute-label">Category:</span>
+                              <span className="category-badge">
+                                {issue.category}
+                              </span>
+                            </div>
+
+                            <div className="attribute-item">
+                              <ThumbsUp className="upvote-icon" />
+                              <span className="upvote-text">
+                                {issue.upvotes} citizen upvotes
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="expanded-actions">
+                          <h4 className="expanded-title">Actions</h4>
+                          <div className="actions-content">
+                            <div className="status-update">
+                              <label className="status-label">
+                                Update Status
+                              </label>
+                              <select
+                                value={issue.status}
+                                onChange={(e) =>
+                                  handleStatusUpdate(issue.id, e.target.value)
+                                }
+                                className="status-select"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                              </select>
+                            </div>
+
+                            <div className="action-buttons">
+                              <button className="action-button action-button-primary">
+                                <Edit3 className="button-icon" />
+                                Update Issue
+                              </button>
+
+                              <button className="action-button action-button-secondary">
+                                <Camera className="button-icon" />
+                                View Image
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
