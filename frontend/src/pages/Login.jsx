@@ -3,6 +3,7 @@ import { Building2, Eye, EyeOff, Shield, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './login.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { authAPI, tokenStorage, userStorage } from '../services/api';
 
 
 function Login() {
@@ -12,16 +13,48 @@ function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [roleSelected, setRoleSelected] = useState(null); // 'user' or 'authority'
   const [showModal, setShowModal] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', { email, password, rememberMe, roleSelected });
-    // you can add API login logic here
+    setLoading(true);
+    setError('');
+
+    try {
+      let response;
+      
+      if (roleSelected === 'user') {
+        response = await authAPI.userLogin({ username: email, password });
+        // Store tokens and user data
+        tokenStorage.setTokens(response.access_token, response.refresh_token);
+        userStorage.setUser(response.user);
+      } else if (roleSelected === 'authority') {
+        response = await authAPI.authorityLogin({ username: email, password });
+        // For authority, we'll store session data differently
+        userStorage.setUser(response.authority);
+      }
+
+      console.log('Login successful:', response);
+      
+      // Navigate based on role
+      if (roleSelected === 'user') {
+        navigate('/'); // Navigate to landing page for public users
+      } else {
+        navigate('/authority'); // Navigate to authority page
+      }
+      
+    } catch (error) {
+      console.error('Login failed:', error);
+      setError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRoleSelect = (role) => {
@@ -83,11 +116,11 @@ function Login() {
           <form onSubmit={handleSubmit} className="login-form">
             <div className="input-group">
               <input
-                type="email"
+                type="text"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your user ID"
+                placeholder="Enter your username"
                 required
               />
             </div>
@@ -124,7 +157,10 @@ function Login() {
               <a href="#" className="forgot-link">Forgot password?</a>
             </div>
 
-            <button type="submit" className="submit-btn">Login</button>
+            {error && <div className="error-message" style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>{error}</div>}
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
           </form>
 
           {roleSelected !== 'Authority' && (

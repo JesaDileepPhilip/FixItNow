@@ -1,7 +1,11 @@
 fastapi
-uvicorn[standard]
-supabase
+
+uvicorn
 python-multipart
-passlib[bcrypt]
-python-dotenv
 pydantic[email]
+passlib[bcrypt]
+python-jose[cryptography]
+python-dotenv
+supabase
+PyJWT
+

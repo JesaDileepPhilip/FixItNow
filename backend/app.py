@@ -4,7 +4,8 @@ from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
-from routes import issues, authority
+from routes import authority, auth
+from routes import issues
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 
@@ -27,8 +28,11 @@ app.add_middleware(
 )
 
 
-app.include_router(authority.router)
+app.include_router(authority.router) 
+app.include_router(auth.router)
 app.include_router(issues.router)
+
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class UserSignup(BaseModel):
@@ -156,6 +160,7 @@ def user_profile(token: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Profile fetch failed: {str(e)}")
+
 
 if __name__ == "__main__":
     import uvicorn
