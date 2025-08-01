@@ -176,11 +176,9 @@ This will generate a hashed password that you can insert into the `authority` ta
    - Backend: Change port in uvicorn command
    - Frontend: Vite will automatically find next available port
 
-## 📝 License
 
-[Your License Here]
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
