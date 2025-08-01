@@ -21,7 +21,7 @@ class UserLogin(BaseModel):
     password: str
 
 class AuthorityLogin(BaseModel):
-    username: str
+    name: str
     password: str
 
 def hash_password(password: str) -> str:
@@ -181,32 +181,37 @@ async def user_login(payload: UserLogin):
 @router.post("/authority/login")
 async def authority_login(payload: AuthorityLogin):
     try:
-        print(f"Authority login attempt for username: {payload.username}")
+        print(f"Authority login attempt for name: {payload.name}")
         
         # Get authority from departments table
-        response = supabase.table("departments").select("*").eq("name", payload.username).limit(1).execute()
+        response = supabase.table("departments").select("*").eq("name", payload.name).limit(1).execute()
         
         print(f"Department response: {response.data}")
         
         if not response.data:
-            print("No authority found with this username")
+            print("No authority found with this name")
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
         auth_record = response.data[0]
         
-        # Verify password
-        if not verify_password(payload.password, auth_record.get("password_hash")):
+       
+        stored_password = auth_record.get("password")
+        if payload.password != stored_password:
             print("Password verification failed")
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
-        if not auth_record.get("approved", False):
+        # Check if approved field exists and is set to false
+        print(f"Approval check - approved field: {auth_record.get('approved')}")
+        print(f"Approval check - approved field exists: {'approved' in auth_record}")
+        
+        if "approved" in auth_record and not auth_record.get("approved", True):
             print("Authority not approved")
             raise HTTPException(status_code=403, detail="Authority not approved")
         
         # Create a simple session token for authority
         session_data = {
             "authority_id": auth_record["id"],
-            "username": auth_record["username"],
+            "name": auth_record["name"],
             "role": "authority",
             "exp": datetime.utcnow() + timedelta(hours=24)
         }
@@ -216,7 +221,7 @@ async def authority_login(payload: AuthorityLogin):
             "session_data": session_data,
             "authority": {
                 "id": auth_record["id"],
-                "username": auth_record["username"],
+                "name": auth_record["name"],
                 "role": "authority"
             }
         }
