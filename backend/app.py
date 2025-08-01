@@ -4,8 +4,12 @@ from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
+<<<<<<< HEAD
+from routes import authority, dashboard
+=======
 from routes import authority, auth
 from routes import issues
+>>>>>>> c411c6c3420ad17be6e59fba28e3a16a56027bb1
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 
@@ -29,6 +33,7 @@ app.add_middleware(
 
 
 app.include_router(authority.router) 
+app.include_router(dashboard.router)
 app.include_router(auth.router)
 app.include_router(issues.router)
 

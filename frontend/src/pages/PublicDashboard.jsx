@@ -1,15 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import IssueCard from './../components/IssueCard';
 import FilterNavbar from './../components/FilterNavbar';
 import IssueModal from './../components/IssueModal';
-//import Footer from './components/Footer';
-import { mockIssues } from './../components/Types';
 import './PublicDashboard.css';
+import axios from 'axios';
 
 function PublicDashboard() {
-  const [issues] = useState(mockIssues);
   const [selectedIssue, setSelectedIssue] = useState(null);
+
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     category: '',
@@ -17,6 +20,23 @@ function PublicDashboard() {
     location: '',
     dateRange: ''
   });
+useEffect(() => {
+  const fetchIssues = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/dashboard/issues");
+      console.log("Fetched issues:", res.data);
+      setIssues(res.data.issues || res.data);  // fallback
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      setError("Failed to fetch issues");
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchIssues();
+}, []);
+
+
 
   const filteredIssues = useMemo(() => {
     return issues.filter(issue => {
@@ -43,6 +63,10 @@ function PublicDashboard() {
   const handleCloseModal = () => {
     setSelectedIssue(null);
   };
+
+  // if (loading) return <div className="container">Loading...</div>;
+  if (error) return <div className="container text-red-600">{error}</div>;
+
 
   return (
     <div className="app">
