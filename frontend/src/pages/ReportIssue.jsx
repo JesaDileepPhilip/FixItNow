@@ -35,7 +35,7 @@ const ReportIssue = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -44,7 +44,7 @@ const ReportIssue = () => {
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         photo: file
       }));
@@ -58,31 +58,47 @@ const ReportIssue = () => {
   };
 
   const handleIntensityChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       intensity: parseInt(e.target.value)
     }));
   };
 
-  const handleSubmit = (e) => {
-    if (e) e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { description, category, intensity, location, photo } = formData;
 
-    if (!formData.description.trim()) {
-      alert('Please enter a description');
-      return;
-    }
-    if (!formData.category) {
-      alert('Please select a category');
-      return;
-    }
-    if (!formData.location.trim()) {
-      alert('Please select a location');
+    if (!description.trim() || !category || !location.trim()) {
+      alert('Please fill all required fields.');
       return;
     }
 
-    console.log('Form submitted:', formData);
-    alert('Report submitted successfully!');
-    navigate('/');
+    const data = new FormData();
+    data.append('description', description);
+    data.append('category', category);
+    data.append('intensity', intensity.toString());
+    data.append('location', location);
+    if (photo) {
+      data.append('photo', photo);
+    }
+
+    try {
+      const res = await fetch('http://127.0.0.1:8000/report-issue', {
+        method: 'POST',
+        body: data
+      });
+
+      if (res.ok) {
+        alert('Issue reported successfully!');
+        navigate('/dashboard');
+      } else {
+        const errorData = await res.json();
+        alert(`Error: ${errorData.detail || 'Failed to report issue'}`);
+      }
+    } catch (error) {
+      console.error('Error submitting issue:', error);
+      alert('Something went wrong while submitting the issue.');
+    }
   };
 
   return (
@@ -111,7 +127,7 @@ const ReportIssue = () => {
                     className="remove-photo"
                     onClick={() => {
                       setPhotoPreview(null);
-                      setFormData(prev => ({ ...prev, photo: null }));
+                      setFormData((prev) => ({ ...prev, photo: null }));
                       fileInputRef.current.value = '';
                     }}
                   >
@@ -140,9 +156,7 @@ const ReportIssue = () => {
 
           {/* Description Section */}
           <div className="form-section">
-            <label className="section-label" htmlFor="description">
-              Issue Description
-            </label>
+            <label className="section-label" htmlFor="description">Issue Description</label>
             <textarea
               id="description"
               name="description"
@@ -157,9 +171,7 @@ const ReportIssue = () => {
 
           {/* Category Dropdown */}
           <div className="form-section">
-            <label className="section-label" htmlFor="category">
-              Issue Category
-            </label>
+            <label className="section-label" htmlFor="category">Issue Category</label>
             <select
               id="category"
               name="category"
