@@ -35,7 +35,7 @@ function Login() {
         tokenStorage.setTokens(response.access_token, response.refresh_token);
         userStorage.setUser(response.user);
       } else if (roleSelected === 'authority') {
-        response = await authAPI.authorityLogin({ username: email, password });
+        response = await authAPI.authorityLogin({ name: email, password });
         // For authority, we'll store session data differently
         userStorage.setUser(response.authority);
       }
