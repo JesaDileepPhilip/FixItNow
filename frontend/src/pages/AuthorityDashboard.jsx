@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   MapPin,
   ChevronDown,
@@ -15,86 +15,7 @@ import {
 } from "lucide-react";
 import "./AuthorityDashboard.css";
 
-const mockIssues = [
-  {
-    id: 1,
-    title: "Broken Street Light on Main Avenue",
-    description:
-      "The street light has been flickering for weeks and finally went out completely. This creates a safety hazard for pedestrians and drivers, especially during evening hours.",
-    category: "Infrastructure",
-    location: "Downtown",
-    status: "pending",
-    upvotes: 23,
-    timestamp: "2024-01-15T10:30:00Z",
-    image:
-      "https://images.pexels.com/photos/327458/pexels-photo-327458.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 2,
-    title: "Garbage Overflow at Park Entrance",
-    description:
-      "Multiple garbage bins are overflowing at the main park entrance. The waste is attracting pests and creating an unpleasant odor for visitors.",
-    category: "Waste Management",
-    location: "Central Park",
-    status: "in-progress",
-    upvotes: 45,
-    timestamp: "2024-01-14T14:15:00Z",
-    image:
-      "https://images.pexels.com/photos/2827735/pexels-photo-2827735.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 3,
-    title: "Pothole on 5th Street",
-    description:
-      "Large pothole has formed after recent rains. It's causing damage to vehicles and poses a risk to cyclists and motorcyclists.",
-    category: "Roads",
-    location: "Residential Area",
-    status: "resolved",
-    upvotes: 67,
-    timestamp: "2024-01-13T09:20:00Z",
-    image:
-      "https://images.pexels.com/photos/163016/highway-asphalt-space-sky-163016.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 4,
-    title: "Illegal Dumping Site",
-    description:
-      "Construction debris and household waste have been illegally dumped in the vacant lot. This is creating environmental and health concerns for nearby residents.",
-    category: "Environment",
-    location: "Industrial Zone",
-    status: "pending",
-    upvotes: 34,
-    timestamp: "2024-01-12T16:45:00Z",
-    image:
-      "https://images.pexels.com/photos/2586819/pexels-photo-2586819.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 5,
-    title: "Water Leak in Public Restroom",
-    description:
-      "Continuous water leak in the public restroom at the community center. Water is pooling on the floor creating slip hazards.",
-    category: "Utilities",
-    location: "Community Center",
-    status: "in-progress",
-    upvotes: 19,
-    timestamp: "2024-01-11T11:30:00Z",
-    image:
-      "https://images.pexels.com/photos/534220/pexels-photo-534220.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 6,
-    title: "Damaged Park Bench",
-    description:
-      "Park bench has broken slats and sharp edges. It's unsafe for public use and needs immediate repair or replacement.",
-    category: "Parks & Recreation",
-    location: "Downtown",
-    status: "resolved",
-    upvotes: 12,
-    timestamp: "2024-01-10T08:15:00Z",
-    image:
-      "https://images.pexels.com/photos/277559/pexels-photo-277559.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-];
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 const getRelativeTime = (timestamp) => {
   const now = new Date();
@@ -114,37 +35,104 @@ const getRelativeTime = (timestamp) => {
 };
 
 const AuthorityDashboard = () => {
-  // const [selectedLocation, setSelectedLocation] = useState("all");
   const [locationSearch, setLocationSearch] = useState("");
   const [expandedCard, setExpandedCard] = useState(null);
+  const [issues, setIssues] = useState([]);
+  const [stats, setStats] = useState({ total: 0, pending: 0, inProgress: 0, resolved: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  
+  const fetchIssues = async (location = null) => {
+    try {
+      setLoading(true);
+      let url = `${API_BASE_URL}/authority/issues`;
+      if (location) {
+        url += `?location=${encodeURIComponent(location)}`;
+      }
+      
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setIssues(data);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching issues:", err);
+      setError("Failed to load issues. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStats = async (location = null) => {
+    try {
+      let url = `${API_BASE_URL}/authority/stats`;
+      if (location) {
+        url += `?location=${encodeURIComponent(location)}`;
+      }
+      
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setStats(data);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
+  const handleStatusUpdate = async (issueId, newStatus) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/authority/issues/update-status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          issue_id: issueId,
+          new_status: newStatus
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await fetchIssues(locationSearch || null);
+      await fetchStats(locationSearch || null);
+      
+      console.log(`Successfully updated issue ${issueId} status to ${newStatus}`);
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Failed to update status. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    fetchIssues();
+    fetchStats();
+  }, []);
 
   const filteredIssues = useMemo(() => {
-    if (!locationSearch.trim()) return mockIssues;
-    return mockIssues.filter((issue) =>
+    if (!locationSearch.trim()) return issues;
+    return issues.filter((issue) =>
       issue.location.toLowerCase().includes(locationSearch.trim().toLowerCase())
     );
-  }, [locationSearch]);
+  }, [issues, locationSearch]);
 
-
-  const stats = useMemo(() => {
-    const total = filteredIssues.length;
-    const pending = filteredIssues.filter(
-      (issue) => issue.status === "pending"
-    ).length;
-    const inProgress = filteredIssues.filter(
-      (issue) => issue.status === "in-progress"
-    ).length;
-    const resolved = filteredIssues.filter(
-      (issue) => issue.status === "resolved"
-    ).length;
-
-    return { total, pending, inProgress, resolved };
-  }, [filteredIssues]);
-
-  const handleStatusUpdate = (issueId, newStatus) => {
-    console.log(`Updating issue ${issueId} status to ${newStatus}`);
+  const handleLocationSearch = async (searchTerm) => {
+    setLocationSearch(searchTerm);
+    if (searchTerm.trim()) {
+      await fetchIssues(searchTerm);
+      await fetchStats(searchTerm);
+    } else {
+      await fetchIssues();
+      await fetchStats();
+    }
   };
 
   const toggleCard = (issueId) => {
@@ -194,7 +182,7 @@ const AuthorityDashboard = () => {
                 type="text"
                 placeholder="Search location..."
                 value={locationSearch}
-                onChange={(e) => setLocationSearch(e.target.value)}
+                onChange={(e) => handleLocationSearch(e.target.value)}
                 className="location-search-input"
               />
             </div>
@@ -255,7 +243,10 @@ const AuthorityDashboard = () => {
         <div className="issues-section">
           <h2 className="issues-title">Recent Issues</h2>
 
-          {filteredIssues.length === 0 ? (
+          {loading && <p>Loading issues...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+
+          {filteredIssues.length === 0 && !loading && !error ? (
             <div className="no-issues">
               <AlertCircle className="no-issues-icon" />
               <p className="no-issues-text">
@@ -268,11 +259,17 @@ const AuthorityDashboard = () => {
                 <div key={issue.id} className="issue-card">
                   <div className="card-header">
                     <div className="card-content">
-                      <img
-                        src={issue.image}
-                        alt={issue.title}
-                        className="issue-image"
-                      />
+                      {issue.image ? (
+                        <img
+                          src={issue.image}
+                          alt={issue.title}
+                          className="issue-image"
+                        />
+                      ) : (
+                        <div className="issue-image-placeholder">
+                          <Camera className="placeholder-icon" />
+                        </div>
+                      )}
 
                       <div className="issue-info">
                         <div className="issue-main">

@@ -225,6 +225,24 @@
   flex-shrink: 0;
 }
 
+.issue-image-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.placeholder-icon {
+  width: 20px;
+  height: 20px;
+  color: #94a3b8;
+}
+
 .issue-info {
   flex: 1;
   min-width: 0;
@@ -476,7 +494,6 @@
   height: 16px;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -501,7 +518,6 @@
   }
 }
 
-/* Responsive Design */
 @media (min-width: 640px) {
   .header-info {
     /* display:flex; */
@@ -533,7 +549,6 @@
   }
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -550,7 +565,6 @@
   outline-offset: 2px;
 }
 
-/* Print Styles */
 @media print {
   .expand-button,
   .location-filter,

@@ -1,37 +1,16 @@
 
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware  # ADD THIS LINE
 from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
-from routes import issues, authority
 
-app = FastAPI(title="FixItNow API", version="1.0.0")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://localhost:5173", 
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:5176",
-        "http://localhost:5177",
-        "http://localhost:5178",
-        "http://localhost:5179",
-        "http://localhost:5180"
-    ], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-app.include_router(authority.router)
-app.include_router(issues.router)
+app = FastAPI()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+
 class UserSignup(BaseModel):
     email: EmailStr
     password: str
@@ -148,15 +127,11 @@ def create_authority(payload: AuthorityCreate):
 
 @app.get("/user/profile")
 def user_profile(token: str):
-    try:
-        user = supabase.auth.get_user(token)
-        if not getattr(user, "data", None):
-            raise HTTPException(status_code=401, detail="Invalid token")
-        return user.data
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Profile fetch failed: {str(e)}")
+
+    user = supabase.auth.get_user(token)
+    if not getattr(user, "data", None):
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return user.data
 
 if __name__ == "__main__":
     import uvicorn
