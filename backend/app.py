@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
-from routes import authority 
+from routes import authority, dashboard
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 
@@ -27,6 +27,7 @@ app.add_middleware(
 )
 
 app.include_router(authority.router) 
+app.include_router(dashboard.router)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
