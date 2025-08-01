@@ -72,7 +72,7 @@ const LocationPicker = ({ formData, setFormData }) => {
       ...prev,
       latitude: position[0],
       longitude: position[1],
-      address: address,
+      location : address,
     }));
   }, [position, address, setFormData]);
 

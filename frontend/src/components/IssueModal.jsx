@@ -4,6 +4,7 @@ import './IssueModal.css';
 
 const IssueModal = ({ issue, onClose, onUpvote }) => {
   const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState(issue.comments || []);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -40,8 +41,13 @@ const IssueModal = ({ issue, onClose, onUpvote }) => {
   const handleSubmitComment = (e) => {
     e.preventDefault();
     if (newComment.trim()) {
-
-      console.log('New comment:', newComment);
+      const newCommentObj = {
+        id: Date.now(), // Temporary ID; ideally use backend-generated ID
+        author: 'You',  // Replace with actual user name if available
+        content: newComment,
+        timestamp: new Date().toISOString()
+      };
+      setComments([...comments, newCommentObj]);
       setNewComment('');
     }
   };
@@ -106,12 +112,12 @@ const IssueModal = ({ issue, onClose, onUpvote }) => {
             <div className="comments-section">
               <h3>
                 <MessageCircle size={20} />
-                Comments ({issue.comments.length})
+                Comments ({comments.length})
               </h3>
 
-              {issue.comments.length > 0 ? (
+              {comments.length > 0 ? (
                 <div className="comments-list">
-                  {issue.comments.map(comment => (
+                  {comments.map(comment => (
                     <div key={comment.id} className="comment">
                       <div className="comment-header">
                         <span className="comment-author">{comment.author}</span>
