@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware  # ADD THIS LINE
 from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
-from routes import authority 
+from routes import issues, authority
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 
@@ -26,10 +26,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(authority.router) 
+
+app.include_router(authority.router)
+app.include_router(issues.router)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 class UserSignup(BaseModel):
     email: EmailStr
     password: str
