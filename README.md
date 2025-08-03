@@ -23,12 +23,38 @@ A full-stack application for managing and tracking civic issues with an authorit
 - **React** - JavaScript library for building user interfaces
 - **Vite** - Build tool and development server
 - **CSS** - Styling and responsive design
+##  Screenshots
 
-## 📋 Prerequisites
+###  Login Page
+![Login](https://github.com/merineldos/FixItNow/blob/main/images/Login.png?raw=true)
 
-- Python 3.8+
-- Node.js 16+
-- Supabase account and project
+### Role View
+![Role](https://github.com/merineldos/FixItNow/blob/main/images/Role.png?raw=true)
+
+###  Landing Page
+![Landing](https://github.com/merineldos/FixItNow/blob/main/images/Landing.png?raw=true)
+
+###  Report Issue
+![Report Issue](https://github.com/merineldos/FixItNow/blob/main/images/ReportIssue.png?raw=true)
+
+###  Report Location
+![Report Location](https://github.com/merineldos/FixItNow/blob/main/images/ReportLocation.png?raw=true)
+
+###  Public Dashboard
+![Public Dashboard](https://github.com/merineldos/FixItNow/blob/main/images/PublicDashboard.png?raw=true)
+
+###  Comments on Report
+![Comments on Report](https://github.com/merineldos/FixItNow/blob/main/images/Comments_onReport.png?raw=true)
+
+###  Issue Card
+![Issue Card](https://github.com/merineldos/FixItNow/blob/main/images/IssueCard.png?raw=true)
+
+
+###  Authority Login
+![Authority Login](https://github.com/merineldos/FixItNow/blob/main/images/AuthorityLogin.png?raw=true)
+
+###  Authority Dashboard
+![Authority Dashboard](https://github.com/merineldos/FixItNow/blob/main/images/AuthorityDahboard.png?raw=true)
 
 ## 🔧 Setup Instructions
 
@@ -55,7 +81,7 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 
 #### Run Backend Server
 ```bash
-python -m uvicorn app:app --reload --host 127.0.0.1 --port 8000
+python app.py
 ```
 
 The backend will be available at `http://127.0.0.1:8000`
@@ -73,7 +99,7 @@ npm install
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173` (or similar port)
+The frontend will be available at `http://localhost:5173`
 
 ### 4. Database Setup
 
@@ -109,73 +135,6 @@ CREATE TABLE authority (
   approved BOOLEAN DEFAULT FALSE
 );
 ```
-
-## 🔐 Authority Account Creation
-
-Since authorities are created by developers, use the provided utility:
-
-```bash
-cd backend
-python utils/generate_hash.py --username admin --password your_password
-```
-
-This will generate a hashed password that you can insert into the `authority` table.
-
-## 📡 API Endpoints
-
-### Authority Endpoints
-- `GET /authority/health` - Health check
-- `GET /authority/issues` - Get all issues (with optional filters)
-- `GET /authority/stats` - Get dashboard statistics
-- `PATCH /authority/issues/{issue_id}` - Update issue status
-- `POST /authority/login` - Authority login
-
-### User Endpoints
-- `POST /user/signup` - User registration
-- `POST /user/login` - User login
-- `GET /user/profile` - Get user profile
-
-## 🎯 Usage
-
-1. **Start both servers** (backend and frontend)
-2. **Login as authority** using credentials created with the hash utility
-3. **View issues** on the dashboard
-4. **Filter by location** using the search bar
-5. **Update status** by clicking on issue cards
-6. **Monitor statistics** in the dashboard header
-
-## 🔧 Development
-
-### Backend Development
-- Server auto-reloads on file changes
-- API documentation available at `http://127.0.0.1:8000/docs`
-- CORS configured for frontend development
-
-### Frontend Development
-- Hot module replacement enabled
-- API calls configured to backend
-- Responsive design with modern UI
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-1. **CORS Errors**
-   - Ensure backend is running on `127.0.0.1:8000`
-   - Check that frontend port is in CORS allowlist
-
-2. **Database Connection Errors**
-   - Verify Supabase credentials in `.env`
-   - Check database schema matches requirements
-
-3. **Module Not Found Errors**
-   - Install missing dependencies: `pip install -r requirements.txt`
-   - For email validation: `pip install email-validator`
-
-4. **Port Already in Use**
-   - Backend: Change port in uvicorn command
-   - Frontend: Vite will automatically find next available port
-
 
 
 ##  Contributing
