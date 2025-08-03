@@ -1,4 +1,4 @@
-# FixItNow - Authority Dashboard
+# FixItNow 
 
 A full-stack application for managing and tracking civic issues with an authority dashboard for status updates and issue management.
 
