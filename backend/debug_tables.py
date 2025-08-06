@@ -12,11 +12,11 @@ def list_tables():
         for table_name in tables_to_check:
             try:
                 response = supabase.table(table_name).select("*").limit(1).execute()
-                print(f"✅ Table '{table_name}' exists")
+                print(f" Table '{table_name}' exists")
                 if response.data:
                     print(f"   Columns: {list(response.data[0].keys())}")
             except Exception as e:
-                print(f"❌ Table '{table_name}' does not exist or error: {str(e)[:100]}")
+                print(f" Table '{table_name}' does not exist or error: {str(e)[:100]}")
                 
     except Exception as e:
         print(f"Error: {e}")

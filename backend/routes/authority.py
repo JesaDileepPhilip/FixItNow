@@ -92,6 +92,7 @@ def get_issues(
     except HTTPException:
         raise
     except Exception as e:
+        print(f"Error in get_issues: {str(e)}")  # Add logging
         raise HTTPException(status_code=500, detail=f"Failed to fetch issues: {str(e)}")
 
 @router.get("/authority/stats", response_model=DashboardStats)
@@ -134,6 +135,7 @@ def get_dashboard_stats(
         )
         
     except Exception as e:
+        print(f"Error in get_dashboard_stats: {str(e)}")  # Add logging
         raise HTTPException(status_code=500, detail=f"Failed to fetch stats: {str(e)}")
 
 class IssueStatusUpdate(BaseModel):
@@ -177,5 +179,77 @@ def update_issue_status(payload: IssueStatusUpdate):
 
 @router.get("/authority/health")
 def health_check():
-    """Health check endpoint for authority routes"""
-    return {"status": "healthy", "message": "Authority routes are working"}
+    """
+    Simple health check to test Supabase connection
+    """
+    try:
+        # Test basic connection
+        result = supabase.table("issues").select("count", count="exact").limit(1).execute()
+        return {"status": "healthy", "message": "Supabase connection working", "data": result}
+    except Exception as e:
+        return {"status": "unhealthy", "error": str(e)}
+
+@router.get("/authority/test")
+def test_endpoint():
+    """
+    Simple test endpoint that returns mock data
+    """
+    return {
+        "status": "working",
+        "message": "Backend is responding correctly",
+        "timestamp": "2024-01-01T00:00:00Z"
+    }
+
+@router.get("/authority/mock-issues")
+def get_mock_issues():
+    """
+    Mock issues endpoint for testing frontend
+    """
+    mock_issues = [
+        {
+            "id": "1",
+            "title": "Pothole on Main Street",
+            "description": "Large pothole causing traffic issues",
+            "category": "Roads",
+            "location": "Main Street, Downtown",
+            "image": None,
+            "status": "pending",
+            "upvotes": 5,
+            "timestamp": "2024-01-01T10:00:00Z"
+        },
+        {
+            "id": "2", 
+            "title": "Broken Street Light",
+            "description": "Street light not working at night",
+            "category": "Lighting",
+            "location": "Oak Avenue",
+            "image": None,
+            "status": "in-progress",
+            "upvotes": 3,
+            "timestamp": "2024-01-01T09:00:00Z"
+        },
+        {
+            "id": "3",
+            "title": "Garbage Can Overflowing",
+            "description": "Public garbage can is full and overflowing",
+            "category": "Sanitation",
+            "location": "City Park",
+            "image": None,
+            "status": "resolved",
+            "upvotes": 2,
+            "timestamp": "2024-01-01T08:00:00Z"
+        }
+    ]
+    return mock_issues
+
+@router.get("/authority/mock-stats")
+def get_mock_stats():
+    """
+    Mock stats endpoint for testing frontend
+    """
+    return {
+        "total": 3,
+        "pending": 1,
+        "inProgress": 1,
+        "resolved": 1
+    }

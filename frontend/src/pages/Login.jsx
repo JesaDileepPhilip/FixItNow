@@ -109,7 +109,7 @@ function Login() {
             <div className="login-icon">
               <Building2 className="icon" />
             </div>
-            <h1 className="login-title">Welcome {roleSelected === 'Authority' ? 'Authority' : 'Public'}</h1>
+            <h1 className="login-title">Welcome {roleSelected === 'authority' ? 'Authority' : 'Public'}</h1>
             <p className="login-subtitle">Enter your credentials to continue</p>
           </div>
 
@@ -163,9 +163,9 @@ function Login() {
             </button>
           </form>
 
-          {roleSelected !== 'Authority' && (
+          {roleSelected === 'user' && (
             <p className="signup-link">
-              Don’t have an account? <Link to="/signup">Sign up</Link>
+              Don't have an account? <Link to="/signup">Sign up</Link>
             </p>
           )}
 

@@ -1,32 +1,21 @@
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware  # ADD THIS LINE
+from fastapi.middleware.cors import CORSMiddleware 
 from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
-<<<<<<< HEAD
-from routes import authority, dashboard
-=======
-from routes import authority, auth
+
+
+from routes import authority, auth,dashboard
 from routes import issues
->>>>>>> c411c6c3420ad17be6e59fba28e3a16a56027bb1
+
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://localhost:5173", 
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:5176",
-        "http://localhost:5177",
-        "http://localhost:5178",
-        "http://localhost:5179",
-        "http://localhost:5180"
-    ], 
-    allow_credentials=True,
+    allow_origins=["*"],  
+    allow_credentials=False,  
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -15,10 +15,10 @@ def main():
 
     hashed_pw = hash_password(args.password)
 
-    print("\n✅ Authority credentials to insert into the database:\n")
+    print("\n Authority credentials to insert into the database:\n")
     print(f"Name: {args.username}")
     print(f"Password (hashed): {hashed_pw}")
-    print("\n⚠️  Copy and insert this into the 'departments' table manually.\n")
+    print("\n  Copy and insert this into the 'departments' table manually.\n")
 
 if __name__ == "__main__":
     main()

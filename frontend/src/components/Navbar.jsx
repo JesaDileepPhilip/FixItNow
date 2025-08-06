@@ -1,8 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authAPI, tokenStorage, userStorage } from '../services/api';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+   
+      await authAPI.logout();
+    } catch (error) {
+      console.error('Logout API error:', error);
+     
+    } finally {
+      // Clear stored tokens and user data
+      tokenStorage.clearTokens();
+      userStorage.clearUser();
+      
+      // Navigate to login page
+      navigate('/login');
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -24,10 +44,10 @@ const Navbar = () => {
             <i className="icon-dashboard"></i>
             <span>Public Dashboard</span>
           </Link>
-          <Link to="/logout" className="navbar-item">
+          <button onClick={handleLogout} className="navbar-item logout-btn">
             <i className="icon-logout"></i>
             <span>Logout</span>
-          </Link>
+          </button>
           
         </div>
       </div>
