@@ -4,11 +4,17 @@ from pydantic import BaseModel, EmailStr
 from clients.supabase_client import supabase
 from passlib.context import CryptContext
 from typing import Optional
+<<<<<<< HEAD
 
 
 from routes import authority, auth,dashboard
 from routes import issues
 
+=======
+from routes import authority, dashboard
+from routes import auth
+from routes import issues
+>>>>>>> 790257ff432f653845b9daba76150c1fce2a3e00
 
 app = FastAPI(title="FixItNow API", version="1.0.0")
 

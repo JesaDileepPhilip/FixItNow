@@ -34,9 +34,10 @@ const IssueCard = ({ issue, onUpvote, onViewDetails }) => {
 
   return (
     <div className="issue-card">
-      {issue.imageUrl && (
+      {/* Display image from Supabase (photo_url) */}
+      {issue.photo_url && (
         <div className="card-image">
-          <img src={issue.imageUrl} alt={issue.title} />
+          <img src={issue.photo_url} alt={issue.title || 'Issue image'} />
         </div>
       )}
       
@@ -62,7 +63,7 @@ const IssueCard = ({ issue, onUpvote, onViewDetails }) => {
           </div>
           <div className="meta-item">
             <Calendar size={16} />
-            <span>{formatDate(issue.submittedAt)}</span>
+            <span>{formatDate(issue.created_at || issue.submittedAt)}</span>
           </div>
         </div>
         
