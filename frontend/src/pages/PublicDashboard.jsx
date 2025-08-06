@@ -109,14 +109,22 @@ useEffect(() => {
           </div>
           
           <div className="issues-table">
-            {filteredIssues.map(issue => (
-              <IssueCard
-                key={issue.id}
-                issue={issue}
-                onUpvote={handleUpvote}
-                onViewDetails={handleViewDetails}
-              />
-            ))}
+            {filteredIssues.map(issue => {
+              // Map backend fields to IssueCard expected props
+              const mappedIssue = {
+                ...issue,
+                submittedAt: issue.timestamp || issue.submittedAt,
+                image: issue.image // already correct from backend
+              };
+              return (
+                <IssueCard
+                  key={mappedIssue.id}
+                  issue={mappedIssue}
+                  onUpvote={handleUpvote}
+                  onViewDetails={handleViewDetails}
+                />
+              );
+            })}
           </div>
           
           {filteredIssues.length === 0 && (
