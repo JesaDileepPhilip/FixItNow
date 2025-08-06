@@ -12,22 +12,22 @@ const IssueCard = ({ issue, onUpvote, onViewDetails }) => {
   };
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'Pending': return 'status-pending';
-      case 'In Progress': return 'status-progress';
-      case 'Resolved': return 'status-resolved';
+    switch (status?.toLowerCase()) {
+      case 'pending': return 'status-pending';
+      case 'in-progress': return 'status-progress';
+      case 'resolved': return 'status-resolved';
       default: return 'status-pending';
     }
   };
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Road': return 'category-road';
-      case 'Water': return 'category-water';
-      case 'Garbage': return 'category-garbage';
-      case 'Electricity': return 'category-electricity';
-      case 'Trees': return 'category-trees';
-      case 'Street Light': return 'category-light';
+    switch (category?.toLowerCase()) {
+      case 'road issues': return 'category-road';
+      case 'water issues': return 'category-water';
+      case 'garbage/waste': return 'category-garbage';
+      case 'electrical problems': return 'category-electricity';
+      case 'trees & vegetation': return 'category-trees';
+      case 'street lights': return 'category-light';
       default: return 'category-default';
     }
   };

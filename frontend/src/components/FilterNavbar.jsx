@@ -2,9 +2,31 @@ import React from 'react';
 import './FilterNavbar.css';
 
 const FilterNavbar = ({ filters, onFiltersChange }) => {
-  const categories = ['Road', 'Water', 'Garbage', 'Electricity', 'Trees', 'Street Light'];
-  const statuses = ['Pending', 'In Progress', 'Resolved'];
-  const locations = ['District 1', 'District 2', 'District 3', 'District 4'];
+  const categories = [
+    'Road Issues',
+    'Garbage/Waste', 
+    'Water Issues',
+    'Electrical Problems',
+    'Trees & Vegetation',
+    'Street Lights'
+  ];
+  const statuses = ['pending', 'in-progress', 'resolved'];
+  const locations = [
+    'Thiruvananthapuram',
+    'Kollam',
+    'Pathanamthitta',
+    'Alappuzha',
+    'Kottayam',
+    'Idukki',
+    'Ernakulam',
+    'Thrissur',
+    'Palakkad',
+    'Malappuram',
+    'Kozhikode',
+    'Wayanad',
+    'Kannur',
+    'Kasaragod'
+  ];
 
   const handleFilterChange = (key, value) => {
     onFiltersChange({
@@ -49,7 +71,7 @@ const FilterNavbar = ({ filters, onFiltersChange }) => {
             >
               <option value="">All Statuses</option>
               {statuses.map(status => (
-                <option key={status} value={status}>{status}</option>
+                <option key={status} value={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</option>
               ))}
             </select>
           </div>
