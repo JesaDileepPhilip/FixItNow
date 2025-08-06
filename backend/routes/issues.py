@@ -125,7 +125,7 @@ async def report_issue(
         issue_data = {
             "title": description[:50] + "..." if len(description) > 50 else description,
             "description": description,
-            "category": category,
+            "category": category.lower().capitalize(), 
             "scale": intensity,
             "location": location,
             "photo_url": photo_url,
@@ -185,7 +185,7 @@ async def get_issue(issue_id: int):
         print(f"Error fetching issue: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching issue: {str(e)}")
 
-@router.get("/issues")
+@router.get("/issues/{issue_id}")
 async def get_all_issues():
     """Get all issues"""
     try:
@@ -245,4 +245,6 @@ async def delete_issue(issue_id: int):
         raise
     except Exception as e:
         print(f"Error deleting issue: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error deleting issue: {str(e)}")
+    
         raise HTTPException(status_code=500, detail=f"Error deleting issue: {str(e)}")

@@ -23,33 +23,75 @@ function PublicDashboard() {
 useEffect(() => {
   const fetchIssues = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const res = await axios.get("http://localhost:8000/dashboard/issues");
-      console.log("Fetched issues:", res.data);
-      setIssues(res.data.issues || res.data);  // fallback
+
+      if (res.data && res.data.issues) {
+        setIssues(res.data.issues);
+      } else {
+        setIssues([]);
+      }
     } catch (err) {
-      console.error("Fetch failed:", err);
+      console.error("Error fetching issues:", err);
       setError("Failed to fetch issues");
     } finally {
       setLoading(false);
     }
   };
+
   fetchIssues();
 }, []);
 
+const filteredIssues = useMemo(() => {
+  return issues.filter(issue => {
+    const title = issue.title?.toLowerCase() || '';
+    const description = issue.description?.toLowerCase() || '';
+    const location = issue.location?.toLowerCase() || '';
+    const category = issue.category?.toLowerCase() || '';
+    const status = issue.status?.toLowerCase() || '';
 
+    const search = searchTerm.toLowerCase();
+    const selectedCategory = filters.category.toLowerCase();
+    const selectedStatus = filters.status.toLowerCase();
+    const selectedLocation = filters.location.toLowerCase();
 
-  const filteredIssues = useMemo(() => {
-    return issues.filter(issue => {
-      const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           issue.description.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesCategory = !filters.category || issue.category === filters.category;
-      const matchesStatus = !filters.status || issue.status === filters.status;
-      const matchesLocation = !filters.location || issue.location.toLowerCase().includes(filters.location.toLowerCase());
-      
-      return matchesSearch && matchesCategory && matchesStatus && matchesLocation;
-    });
-  }, [issues, searchTerm, filters]);
+    const matchesSearch =
+      title.includes(search) || description.includes(search);
+
+    const matchesCategory = !selectedCategory || category === selectedCategory;
+    const matchesStatus = !selectedStatus || status === selectedStatus;
+    const matchesLocation = !selectedLocation || location.includes(selectedLocation);
+
+    // Date range filtering
+    let matchesDateRange = true;
+    if (filters.dateRange && issue.created_at) {
+      const issueDate = new Date(issue.created_at);
+      const today = new Date();
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+      switch (filters.dateRange) {
+        case 'today':
+          matchesDateRange = issueDate >= startOfDay;
+          break;
+        case 'week':
+          matchesDateRange = issueDate >= startOfWeek;
+          break;
+        case 'month':
+          matchesDateRange = issueDate >= startOfMonth;
+          break;
+        default:
+          matchesDateRange = true;
+      }
+    }
+
+    return matchesSearch && matchesCategory && matchesStatus && matchesLocation && matchesDateRange;
+  });
+}, [issues, searchTerm, filters]);
+
 
   const handleUpvote = (issueId) => {
     // In a real app, this would make an API call

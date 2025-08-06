@@ -2,8 +2,15 @@ import React from 'react';
 import './FilterNavbar.css';
 
 const FilterNavbar = ({ filters, onFiltersChange }) => {
-  const categories = ['Road', 'Water', 'Garbage', 'Electricity', 'Trees', 'Street Light'];
-  const statuses = ['Pending', 'In Progress', 'Resolved'];
+  const categories = [
+    'Road Issues',
+    'Garbage/Waste', 
+    'Water Issues',
+    'Electrical Problems',
+    'Trees & Vegetation',
+    'Street Lights'
+  ];
+  const statuses = ['open', 'pending', 'in-progress', 'resolved'];
   const locations = ['District 1', 'District 2', 'District 3', 'District 4'];
 
   const handleFilterChange = (key, value) => {
@@ -49,7 +56,7 @@ const FilterNavbar = ({ filters, onFiltersChange }) => {
             >
               <option value="">All Statuses</option>
               {statuses.map(status => (
-                <option key={status} value={status}>{status}</option>
+                <option key={status} value={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</option>
               ))}
             </select>
           </div>
