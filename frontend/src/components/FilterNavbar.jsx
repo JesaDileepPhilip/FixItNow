@@ -10,8 +10,23 @@ const FilterNavbar = ({ filters, onFiltersChange }) => {
     'Trees & Vegetation',
     'Street Lights'
   ];
-  const statuses = ['open', 'pending', 'in-progress', 'resolved'];
-  const locations = ['District 1', 'District 2', 'District 3', 'District 4'];
+  const statuses = ['pending', 'in-progress', 'resolved'];
+  const locations = [
+    'Thiruvananthapuram',
+    'Kollam',
+    'Pathanamthitta',
+    'Alappuzha',
+    'Kottayam',
+    'Idukki',
+    'Ernakulam',
+    'Thrissur',
+    'Palakkad',
+    'Malappuram',
+    'Kozhikode',
+    'Wayanad',
+    'Kannur',
+    'Kasaragod'
+  ];
 
   const handleFilterChange = (key, value) => {
     onFiltersChange({

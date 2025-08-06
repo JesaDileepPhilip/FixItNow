@@ -129,7 +129,7 @@ async def report_issue(
             "scale": intensity,
             "location": location,
             "photo_url": photo_url,
-            "status": "open",
+            "status": "pending",
             "dept_id": 1,  # Default department ID - you may need to adjust this
             "upvotes": 0,  # Add default upvotes
             "created_at": datetime.utcnow().isoformat(),
